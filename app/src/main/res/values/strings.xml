@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FileUploadDemo</string>
+    <string name="upload_file">Upload File</string>
 </resources>
