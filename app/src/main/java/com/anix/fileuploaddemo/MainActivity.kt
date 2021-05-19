@@ -11,6 +11,7 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.util.Log
@@ -46,6 +47,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var  storageRefrence:StorageReference
     lateinit var progressBar:ProgressBar
     lateinit var txtProgressBarPercentabe : TextView
+    var countDowntimer : CountDownTimer?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +63,8 @@ class MainActivity : AppCompatActivity() {
         progressBar.visibility= View.GONE
 
         storageRefrence = FirebaseStorage.getInstance().reference.child("Videos")
+        val netSpeed = TrafficUtils.getNetworkSpeed()
+        Log.e("NetSpeed", "onActivityResult: $netSpeed", )
     }
 
     fun clickEvents(){
@@ -170,10 +174,26 @@ class MainActivity : AppCompatActivity() {
                         val progress= (100*it.bytesTransferred)/it.totalByteCount
                         progressBar.setProgress(progress.toInt())
                         txtProgressBarPercentabe.text=progress.toString()+" "+"%"
+
+
                     })
 
                 }// MEDIA GALLERY
 
             }
         }
+
+    fun checkNetworkSpeed(){
+        countDowntimer =   object : CountDownTimer(1000, 5) {
+            override fun onTick(l: Long) {
+            }
+
+            override fun onFinish() {
+                //Code hear to check network speed
+                val netSpeed = TrafficUtils.getNetworkSpeed()
+                Log.e("NetSpeed", "onActivityResult: $netSpeed", )
+            }
+        }.start()
+
+    }
 }
